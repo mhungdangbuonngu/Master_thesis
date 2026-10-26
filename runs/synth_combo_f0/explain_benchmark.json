@@ -1,0 +1,32 @@
+{
+  "syn/logit": {
+    "n": 200,
+    "recall@3": 0.152,
+    "main@3": 0.398
+  },
+  "syn/contrast": {
+    "n": 200,
+    "recall@3": 0.195,
+    "main@3": 0.32
+  },
+  "syn/interaction": {
+    "n": 200,
+    "recall@3": 0.203,
+    "main@3": 0.147
+  },
+  "ant/logit": {
+    "n": 123,
+    "recall@3": 0.057,
+    "main@3": 0.428
+  },
+  "ant/contrast": {
+    "n": 123,
+    "recall@3": 0.095,
+    "main@3": 0.331
+  },
+  "ant/interaction": {
+    "n": 123,
+    "recall@3": 0.068,
+    "main@3": 0.089
+  }
+}

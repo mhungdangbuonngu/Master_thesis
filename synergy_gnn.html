@@ -1,0 +1,220 @@
+<title>SynergyGNN</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --ink:#1b2330; --muted:#5a6575; --line:#c9d0da;
+  --gene:#0f7c80; --gene-bg:#e3f3f3; --drug:#a35f00; --drug-bg:#fbefdc;
+  --ig:#b0246a; --head-bg:#eceff4;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#12161d; --panel:#1a2029; --ink:#e4e8ee; --muted:#9aa5b4; --line:#3a4452;
+    --gene:#4cc6c9; --gene-bg:#13302f; --drug:#f0a640; --drug-bg:#33270f;
+    --ig:#f06aa8; --head-bg:#222a35;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#12161d; --panel:#1a2029; --ink:#e4e8ee; --muted:#9aa5b4; --line:#3a4452;
+  --gene:#4cc6c9; --gene-bg:#13302f; --drug:#f0a640; --drug-bg:#33270f;
+  --ig:#f06aa8; --head-bg:#222a35;
+}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 "IBM Plex Sans",system-ui,sans-serif;padding-inline:16px;padding-block:32px 48px}
+main{max-width:1180px;margin:0 auto;display:grid;gap:28px}
+h1{font-size:26px;font-weight:600;margin:0;text-wrap:balance}
+h2{font-size:17px;font-weight:600;margin:0 0 10px}
+.lede{color:var(--muted);margin:6px 0 0;max-width:70ch}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.92em}
+figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px}
+.scroll{overflow-x:auto}
+svg{display:block;width:100%;min-width:900px;height:auto;color:var(--ink)}
+figcaption{color:var(--muted);font-size:13.5px;margin-top:10px;max-width:90ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:10px;border-radius:2px;border:1.5px solid}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr));gap:20px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+td.num{font-variant-numeric:tabular-nums;font-family:"IBM Plex Mono",monospace}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;overflow-x:auto}
+.src{font-size:13px;color:var(--muted)}
+
+.box{fill:var(--panel);stroke:currentColor;stroke-width:1.2}
+.g{fill:var(--gene-bg);stroke:var(--gene);stroke-width:1.5}
+.d{fill:var(--drug-bg);stroke:var(--drug);stroke-width:1.5}
+.h{fill:var(--head-bg);stroke:currentColor;stroke-width:1.2}
+.igbox{fill:none;stroke:var(--ig);stroke-width:2;stroke-dasharray:6 4}
+.t{fill:currentColor;font:500 13px "IBM Plex Sans",sans-serif}
+.s{fill:var(--muted);font:12px "IBM Plex Mono",monospace}
+.lbl{fill:var(--muted);font:11.5px "IBM Plex Mono",monospace}
+.tg{fill:var(--gene);font:600 11.5px "IBM Plex Sans",sans-serif}
+.td{fill:var(--drug);font:600 11.5px "IBM Plex Sans",sans-serif}
+.ti{fill:var(--ig);font:600 11.5px "IBM Plex Sans",sans-serif}
+.ln{stroke:currentColor;stroke-width:1.4;fill:none}
+.lg{stroke:var(--gene);stroke-width:1.6;fill:none}
+.ld{stroke:var(--drug);stroke-width:1.6;fill:none}
+.dot{fill:var(--drug)}
+</style>
+
+<main>
+  <header>
+    <h1>SynergyGNN</h1>
+    <p class="lede">Mô hình dự đoán hiệp đồng 3 lớp cho bộ ba (thuốc A, thuốc B, dòng tế bào c), đúng như code trong <code>src/model/gnn.py</code>. Kích thước ghi theo tham số mặc định của <code>train.py</code>. B là batch, N là số gene, D là số thuốc.</p>
+  </header>
+
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1290 620" role="img" aria-label="Luồng dữ liệu của SynergyGNN: biểu hiện gene và target của hai thuốc thành đặc trưng node, qua 2 lớp GCN trên mạng PPI, được flatten theo gene, ghép với embedding thuốc đối xứng, rồi qua MLP ra 3 logit ant, add, syn. Integrated Gradients lấy gradient theo biểu hiện gene.">
+      <defs>
+        <marker id="arI" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ig)"/></marker>
+        <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+        <marker id="arG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--gene)"/></marker>
+        <marker id="arD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--drug)"/></marker>
+      </defs>
+
+      <text class="lbl" x="95" y="100" text-anchor="middle">ĐẦU VÀO</text>
+      <text class="lbl" x="305" y="100" text-anchor="middle">TRA CỨU</text>
+      <text class="lbl" x="515" y="100" text-anchor="middle">NODE GENE</text>
+      <text class="lbl" x="935" y="100" text-anchor="middle">THEO GENE</text>
+      <text class="lbl" x="1165" y="100" text-anchor="middle">ĐẦU RA</text>
+
+      <!-- Inputs -->
+      <rect class="box" x="20" y="110" width="150" height="44" rx="6"/>
+      <text class="t" x="95" y="137" text-anchor="middle">Dòng tế bào c</text>
+      <rect class="box" x="20" y="230" width="150" height="44" rx="6"/>
+      <text class="t" x="95" y="257" text-anchor="middle">Thuốc A (chỉ số a)</text>
+      <rect class="box" x="20" y="290" width="150" height="44" rx="6"/>
+      <text class="t" x="95" y="317" text-anchor="middle">Thuốc B (chỉ số b)</text>
+
+      <!-- Lookups -->
+      <rect class="g" x="220" y="110" width="170" height="44" rx="6"/>
+      <rect class="igbox" x="215" y="105" width="180" height="54" rx="9"/>
+      <text class="t" x="305" y="129" text-anchor="middle">Biểu hiện expr_c</text>
+      <text class="s" x="305" y="146" text-anchor="middle">(B, N) z-score CCLE</text>
+      <text class="ti" x="355" y="180" text-anchor="end">IG lấy gradient ở đây</text>
+
+      <rect class="g" x="220" y="215" width="170" height="135" rx="6"/>
+      <text class="t" x="305" y="240" text-anchor="middle">targets[a] → tA</text>
+      <text class="t" x="305" y="262" text-anchor="middle">targets[b] → tB</text>
+      <line x1="240" y1="276" x2="370" y2="276" stroke="var(--gene)" stroke-width="1"/>
+      <text class="t" x="305" y="298" text-anchor="middle">tA + tB,  tA · tB</text>
+      <text class="s" x="305" y="316" text-anchor="middle">(B, N) mỗi kênh</text>
+      <text class="tg" x="305" y="338" text-anchor="middle">đối xứng A↔B</text>
+
+      <rect class="d" x="220" y="420" width="170" height="54" rx="6"/>
+      <text class="t" x="305" y="442" text-anchor="middle">drug_emb</text>
+      <text class="s" x="305" y="460" text-anchor="middle">Embedding D × 16</text>
+
+      <line class="ln" x1="170" y1="132" x2="218" y2="132" marker-end="url(#ar)"/>
+      <line class="ln" x1="170" y1="252" x2="218" y2="252" marker-end="url(#ar)"/>
+      <line class="ln" x1="170" y1="312" x2="218" y2="312" marker-end="url(#ar)"/>
+      <polyline class="ld" points="196,252 196,447 218,447" marker-end="url(#arD)"/>
+      <circle class="dot" cx="196" cy="252" r="3"/>
+      <circle class="dot" cx="196" cy="312" r="3"/>
+      <text class="td" x="188" y="400" text-anchor="end">a, b</text>
+
+      <!-- Node features -->
+      <rect class="g" x="440" y="115" width="150" height="235" rx="6"/>
+      <text class="t" x="515" y="200" text-anchor="middle">Đặc trưng node</text>
+      <text class="s" x="515" y="222" text-anchor="middle">h₀ = [expr,</text>
+      <text class="s" x="515" y="239" text-anchor="middle">tA+tB, tA·tB]</text>
+      <text class="s" x="515" y="264" text-anchor="middle">(B, N, 3)</text>
+      <line class="lg" x1="390" y1="132" x2="438" y2="132" marker-end="url(#arG)"/>
+      <line class="lg" x1="390" y1="290" x2="438" y2="290" marker-end="url(#arG)"/>
+
+      <!-- PPI -->
+      <rect class="box" x="640" y="12" width="170" height="64" rx="6"/>
+      <text class="t" x="725" y="36" text-anchor="middle">Mạng PPI Â (N × N)</text>
+      <text class="s" x="725" y="56" text-anchor="middle">D^-½ (A+I) D^-½</text>
+      <line class="ln" x1="725" y1="76" x2="725" y2="168" marker-end="url(#ar)"/>
+      <text class="lbl" x="733" y="128">dùng chung mọi bộ ba</text>
+
+      <!-- GCN -->
+      <rect class="g" x="640" y="170" width="170" height="110" rx="6"/>
+      <text class="t" x="725" y="196" text-anchor="middle">GCN × 2 lớp</text>
+      <text class="s" x="725" y="220" text-anchor="middle">h ← ReLU(Â h W)</text>
+      <text class="s" x="725" y="242" text-anchor="middle">3 → 32 → 32</text>
+      <text class="s" x="725" y="264" text-anchor="middle">(B, N, 32)</text>
+      <line class="lg" x1="590" y1="225" x2="638" y2="225" marker-end="url(#arG)"/>
+
+      <!-- gene_out + flatten -->
+      <rect class="g" x="860" y="170" width="150" height="110" rx="6"/>
+      <text class="t" x="935" y="196" text-anchor="middle">gene_out 32 → 4</text>
+      <text class="t" x="935" y="218" text-anchor="middle">rồi flatten</text>
+      <text class="s" x="935" y="242" text-anchor="middle">(B, 4N)</text>
+      <text class="tg" x="935" y="266" text-anchor="middle">giữ danh tính gene</text>
+      <line class="lg" x1="810" y1="225" x2="858" y2="225" marker-end="url(#arG)"/>
+
+      <!-- Drug symmetric combine -->
+      <rect class="d" x="640" y="420" width="170" height="54" rx="6"/>
+      <text class="t" x="725" y="442" text-anchor="middle">[eA + eB, eA · eB]</text>
+      <text class="s" x="725" y="460" text-anchor="middle">(B, 32)</text>
+      <text class="td" x="725" y="492" text-anchor="middle">đối xứng A↔B</text>
+      <line class="ld" x1="390" y1="447" x2="638" y2="447" marker-end="url(#arD)"/>
+      <text class="lbl" x="515" y="439" text-anchor="middle">eA, eB  (B, 16)</text>
+
+      <!-- Head -->
+      <rect class="h" x="1060" y="250" width="210" height="150" rx="6"/>
+      <text class="t" x="1165" y="274" text-anchor="middle">concat (B, 4N + 32)</text>
+      <line x1="1080" y1="286" x2="1250" y2="286" stroke="var(--line)"/>
+      <text class="s" x="1165" y="308" text-anchor="middle">Linear → 128</text>
+      <text class="s" x="1165" y="328" text-anchor="middle">ReLU</text>
+      <text class="s" x="1165" y="348" text-anchor="middle">Dropout 0.2</text>
+      <text class="s" x="1165" y="372" text-anchor="middle">Linear 128 → 3</text>
+      <polyline class="lg" points="1010,225 1035,225 1035,295 1058,295" marker-end="url(#arG)"/>
+      <polyline class="ld" points="810,447 1035,447 1035,360 1058,360" marker-end="url(#arD)"/>
+
+      <!-- Output -->
+      <rect class="box" x="1060" y="440" width="210" height="54" rx="6"/>
+      <text class="t" x="1165" y="463" text-anchor="middle">3 logit</text>
+      <text class="s" x="1165" y="482" text-anchor="middle">z_ant · z_add · z_syn</text>
+      <line class="ln" x1="1165" y1="400" x2="1165" y2="438" marker-end="url(#ar)"/>
+
+      <!-- Loss -->
+      <rect class="box" x="1060" y="540" width="210" height="58" rx="6" stroke-dasharray="4 3"/>
+      <text class="t" x="1165" y="563" text-anchor="middle">Cross-entropy</text>
+      <text class="s" x="1165" y="582" text-anchor="middle">trọng số lớp 1/tần suất</text>
+      <line class="ln" x1="1165" y1="494" x2="1165" y2="538" marker-end="url(#ar)"/>
+
+      <!-- IG back path -->
+      <polyline points="1060,478 960,478 960,560 415,560 415,190 365,190 365,162" fill="none" stroke="var(--ig)" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arI)"/>
+      <text class="ti" x="690" y="582" text-anchor="middle">Integrated Gradients: ∂(đại lượng cần giải thích) / ∂expr_c, baseline = 0, 32 bước</text>
+    </svg>
+    </div>
+    <figcaption>Nhánh gene (xanh) giữ nguyên trục N cho đến khi flatten, nên attribution theo expr_c gán được cho từng gene. Nhánh thuốc (cam) chỉ đi qua embedding. Cả hai chỗ trộn A với B đều dùng tổng và tích, vì vậy f(A, B, c) = f(B, A, c) mà không cần augmentation. Đường đứt nét hồng là chiều tính giải thích sau khi train, không tham gia lúc train.</figcaption>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--gene-bg);border-color:var(--gene)"></i>Nhánh gene / đồ thị PPI</span>
+      <span><i class="sw" style="background:var(--drug-bg);border-color:var(--drug)"></i>Nhánh thuốc</span>
+      <span><i class="sw" style="border-color:var(--ig);border-style:dashed"></i>Integrated Gradients</span>
+    </div>
+  </figure>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Kích thước trên dữ liệu bán tổng hợp</h2>
+      <table>
+        <tr><th>Đại lượng</th><th>Giá trị</th></tr>
+        <tr><td>Gene N</td><td class="num">300</td></tr>
+        <tr><td>Thuốc D</td><td class="num">24</td></tr>
+        <tr><td>Dòng tế bào</td><td class="num">300</td></tr>
+        <tr><td>Bộ ba (A, B, c)</td><td class="num">82,800</td></tr>
+        <tr><td>Đầu vào head 4N + 32</td><td class="num">1,232</td></tr>
+        <tr><td>Với dữ liệu thật, N = 1000</td><td class="num">4,032</td></tr>
+      </table>
+      <p class="src">Nguồn: <code>data/synth.pt</code>, <code>train.py</code> (hidden 32, gene_dim 4, drug_dim 16, 2 lớp, AdamW lr 1e-3, batch 256).</p>
+    </section>
+
+    <section class="card">
+      <h2>Ba cấp giải thích</h2>
+      <table>
+        <tr><th>Cấp</th><th>Đại lượng đưa vào IG</th></tr>
+        <tr><td>(i) logit</td><td class="mono">z_syn</td></tr>
+        <tr><td>(ii) contrast</td><td class="mono">Δ = z_syn − z_add</td></tr>
+        <tr><td>(iii) interaction</td><td class="mono">Δ(A,B) − E_r Δ(A,r) − E_r Δ(r,B) + E_rr' Δ(r,r')</td></tr>
+      </table>
+      <p class="src">Cả ba dùng cùng một model và cùng gradient theo expr_c. Chỉ đại lượng ở đầu ra là khác nhau (<code>src/eval/attribution.py</code>). Với lớp ant, thay z_syn bằng z_ant.</p>
+    </section>
+  </div>
+</main>
