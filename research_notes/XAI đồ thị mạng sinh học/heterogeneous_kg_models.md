@@ -1,0 +1,92 @@
+# Group 3 (Graph & Network Path XAI): Heterogeneous / KG / meta-path / multi-relational / hypergraph drug-synergy models
+
+Scope note: about 20 search and fetch calls. pubs.acs.org (JCIM) and academic.oup.com returned 403, so several factsheets rest on PMC full text, GitHub READMEs, dblp/OpenAlex metadata, or abstract mirrors. The **Verification status** line in each entry says which.
+
+## Q1. Per-paper verified factsheets
+
+### Takeaway
+Only one paper in this group has a real **path/subgraph-level explainer**: SDCInterpreter (JCIM 2026, not 2025), which uses R-GCN plus PaGELink edge-mask path explanations. The others (HANSynergy, KGANSynergy, HGTSynergy, MGAE-DC, HypergraphSynergy, SynergyGraph) at most offer attention-weight analysis or none at all. "KG-Synergy (Zhang et al., Brief Bioinform 2023)" does not exist under that name. It is almost certainly a garbled reference to **KGANSynergy** (Zhang G. et al., BIB 2023 24(3)).
+
+### Cited Findings
+
+#### 1. SDCInterpreter (verified; the year and schema details in the prompt need correcting)
+- **Exact title:** "Path-based graph neural network for drug synergy prediction and interpretation" — [GitHub README](https://github.com/chenxgscuec/SDCInterpreter); [ACS landing page](https://pubs.acs.org/doi/10.1021/acs.jcim.5c02569)
+- **Authors:** Shuo Wang, Hongchuan Yuan, Zhengcheng Hong, Xian-gan Chen (corresponding), Xiaofei Yang. School of Biomedical Engineering, South-Central Minzu University, China — [GitHub README](https://github.com/chenxgscuec/SDCInterpreter)
+- **Venue:** J. Chem. Inf. Model. **2026, 66(1):337–348**, DOI 10.1021/acs.jcim.5c02569. The README is dated 2025-12-05, so "JCIM 2025" in existing notes is probably the online-first date. Cite it as 2026 — [GitHub README](https://github.com/chenxgscuec/SDCInterpreter)
+- **Graph and model:** it builds a heterogeneous graph and uses a relational graph convolutional network (R-GCN) for node representations. Given two drugs and a cancer cell line, it predicts synergy and then generates a set of graph paths as the biological explanation. The graph links drugs, genes, pathways and cell lines — [search summary of ACS abstract and DeepWiki](https://pubs.acs.org/doi/10.1021/acs.jcim.5c02569); [DeepWiki (auto-generated, secondary)](https://deepwiki.com/chenxgscuec/SDCInterpreter)
+- **Explanation mechanism:** a masked-edge optimisation layer based on **PaGELink**, a path-based GNN explainer for link prediction. It learns edge masks and extracts the subgraph paths most relevant to each prediction — [DeepWiki](https://deepwiki.com/chenxgscuec/SDCInterpreter)
+- **Explanation evaluation:** the repo has dedicated scripts, `interpret.py`, `valid_path.py` and `eval_explanations.py --emb_dim=64 --hidden_dim=64 --out_dim=64`. This implies some quantitative evaluation of the explanation paths, not just case studies. The metric itself is not stated in the README — [GitHub README](https://github.com/chenxgscuec/SDCInterpreter)
+- **Code stack:** Python 3.7, PyTorch 1.13.1 + DGL 1.1.2 (cu116). Folders `Data/`, `Model/`, `Utils/`, `baselines/` — [GitHub README](https://github.com/chenxgscuec/SDCInterpreter)
+- **Possibly confused with:** SDCNet (BIB 2022, doi 10.1093/bib/bbac403), an R-GCN in which each cell line's synergy graph is one relation type. It is a different model — [OUP](https://doi.org/10.1093/bib/bbac403)
+
+#### 2. HANSynergy (verified from abstract and metadata)
+- **Citation:** Cheng N, Wang L, Liu Y, Song B, Ding C. "HANSynergy: Heterogeneous Graph Attention Network for Drug Synergy Prediction." *J Chem Inf Model* 2024;64(10):4334–4347. DOI 10.1021/acs.jcim.4c00003. PMID 38709204. Online 2024-05-06 — [PubMed](https://pubmed.ncbi.nlm.nih.gov/38709204/); [dblp](https://dblp.org/rec/journals/jcisd/ChengWLSD24); [X-MOL](https://login.x-mol.com/paper/1788780077418999808)
+- **Graph and data sources:** a heterogeneous graph of diverse biological entities and interactions, built from DrugCombDB, PubChem, UniProt and CCLE. Node types appear to be drug, protein and cell line — [X-MOL abstract](https://login.x-mol.com/paper/1788780077418999808)
+- **Model:** a heterogeneous graph attention network (HAN-style, with node- and semantic-level attention) — [PubMed](https://pubmed.ncbi.nlm.nih.gov/38709204/)
+- **Explanation:** attention weights are used to identify proteins possibly associated with drug combinations, by comparing attention **before vs. after** training on the heterogeneous network. This is neighbour/attention-level evidence, not path extraction. Validation appears to be qualitative only — [X-MOL abstract](https://login.x-mol.com/paper/1788780077418999808)
+- **Headline results:** DrugCombDB_early, ACC 0.877, AUC 0.947 — [X-MOL abstract](https://login.x-mol.com/paper/1788780077418999808)
+
+#### 3. KGANSynergy (verified; DOI from a secondary source only)
+- **Citation:** Zhang G, Gao Z, Yan C, Wang J, Liang W, Luo J, Luo H. "KGANSynergy: knowledge graph attention network for drug synergy prediction." *Brief Bioinform* 2023;24(3):bbad167 — [dblp](https://dblp1.uni-trier.de/rec/journals/bib/ZhangGYWLLL23.html); [ScienceGate](https://boch.sciencegate.app/works/W4367673946). The article number bbad167 was confirmed only through a later arXiv reference list (search result for [arXiv 2604.21473](https://arxiv.org/pdf/2604.21473)). The expected DOI is 10.1093/bib/bbad167, but the publisher page was not reached.
+- **Model:** an end-to-end KG attention network. **KG hierarchical propagation** collects multi-source neighbour nodes for drugs and cell lines. A **multi-attention mechanism** weights those neighbours, and the aggregated embeddings predict synergy — [ScienceGate abstract](https://boch.sciencegate.app/works/W4367673946)
+- **Explanation:** at most neighbour-attention weights. No path explainer is described in the abstract — [ScienceGate abstract](https://boch.sciencegate.app/works/W4367673946)
+
+#### 4. MGAE-DC (verified; this is a multi-relational, not KG, model)
+- **Citation:** Zhang P, Tu S. "MGAE-DC: Predicting the synergistic effects of drug combinations through multi-channel graph autoencoders." *PLoS Comput Biol* 2023 (March);19(3):e1010951. DOI 10.1371/journal.pcbi.1010951 — [PMC10027223](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10027223/); [OpenAlex](https://api.openalex.org/works/doi:10.1371%2FJOURNAL.PCBI.1010951)
+- **Graph:** for each cell line, three graphs (synergistic, additive and antagonistic drug–drug edges). These form multi-channel graph autoencoders. Drug features come from a GCN over molecular graphs. Attention fuses the per-cell-line drug embeddings, and cell-line-shared decoders extract a common drug embedding — [PMC](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10027223/)
+- **Performance and code:** the authors report it "consistently outperforms" state-of-the-art methods on four benchmark datasets. Code: https://github.com/yushenshashen/MGAE-DC — [PMC](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10027223/)
+- **Explanation:** none at path level; only cell-line attention fusion — [PMC](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10027223/)
+
+#### 5. HypergraphSynergy (verified; the venue in the prompt was correct)
+- **Citation:** Liu X, Song C, Liu S, Li M, Zhou X, Zhang W. "Multi-way relation-enhanced hypergraph representation learning for anti-cancer drug synergy prediction." *Bioinformatics* 2022;38(20):4782–4789. DOI 10.1093/bioinformatics/btac579 — [OUP](https://academic.oup.com/bioinformatics/article/38/20/4782/6674505); [dblp](https://dblp.org/rec/journals/bioinformatics/LiuSLLZZ22)
+- **Graph:** a hypergraph whose nodes are drugs and cell lines. Each **synergistic drug–drug–cell-line triplet is a hyperedge**. Node attributes are biochemical features. An HGNN learns embeddings — [OUP](https://academic.oup.com/bioinformatics/article/38/20/4782/6674505)
+- **Results:** outperforms state-of-the-art methods on two benchmarks for both classification and regression, and is applicable to unseen combinations and cell lines. Code: https://github.com/liuxuan666/HypergraphSynergy — [GitHub](https://github.com/liuxuan666/HypergraphSynergy)
+- **Criticism:** HERMES (Bioinformatics 2025, doi 10.1093/bioinformatics/btae750) argues it generalises poorly to novel combinations — [arXiv 2406.10778](https://arxiv.org/html/2406.10778v2)
+
+#### 6. HGTSynergy (verified from PMC full text; a "2026" paper, BMC Bioinformatics)
+- **Citation:** Wang X, Huang Y, Zhu H, Mao D, Zhu X, Liu Q. "HGTSynergy: a transfer learning method for predicting anticancer synergistic drug combinations based on a drug-drug interaction heterogeneous graph." *BMC Bioinformatics* 2026;27:35. DOI 10.1186/s12859-025-06360-5. PMID 41495639. Online 2026-01-06 — [PMC12870253](https://pmc.ncbi.nlm.nih.gov/articles/PMC12870253/)
+- **Schema:** a single node type (drug) with **293 DDI edge types** taken from DrugBank 5.1.12 sentences (11,719 drugs, 1,094,569 DDI sentences). Meta-paths are one-hop, one per DDI type. Node features are Morgan, MACCS and RDKit descriptors (1,387 dimensions), compressed to 128 by an autoencoder. Cell-line features: expression (ArrayExpress E-MTAB-3610), COSMIC mutations, and STRING v10.5 PPI via a GCN — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12870253/)
+- **Architecture:** pre-trains a HAN encoder to classify the 293 DDI types (focal loss). This transfers to a predictor in which multi-head attention uses drug features as queries and DDI embeddings as keys/values, followed by an MLP trained with MSE — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12870253/)
+- **Data and split:** O'Neil dataset (38 drugs, 39 cell lines, 7 tissues). Loewe labels: 22,737 samples after merging. Bliss labels come from the MGAE-DC repo. 5-fold nested CV, leave-drug-combinations-out — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12870253/)
+- **Results:** Loewe regression MSE 222.83, RMSE 14.91, PCC 0.75. Bliss regression MSE 25.18, PCC 0.75. Loewe classification (threshold 30): ROC-AUC 0.90, PR-AUC 0.63, ACC 0.94. Removing pre-training adds 8.23 to MSE — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12870253/)
+- **"Interpretability":** t-SNE plots of DDI embeddings (Calinski–Harabasz and Davies–Bouldin indices), ablations that equalise semantic- or node-level attention, attention masking, and a literature case study. This is indirect evidence, with no mechanism or path explanations — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12870253/)
+- **Stated limitations:** fingerprints only (no molecular-structure interpretability), DDIs from DrugBank only, and sensitivity to learning rate. Code: https://github.com/Bakers-Lab/HGTSynergy — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12870253/)
+- **Other heterogeneous-graph work it cites:** MCDSP (Luo T et al., *J Cheminform* 2025;17, doi 10.1186/s13321-025-01087-0); DEML (*Molecules* 2023;28(2):844); Monem et al. (*Sci Rep* 2023;13:22463, DDI pre-training) — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12870253/)
+
+#### 7. SynergyGraph (exists; authorship and DOI only partly verified)
+- **Title:** "SynergyGraph: predicting cell line specific drug combination synergy scores using knowledge graph representation and hypergraph modeling." Listed in PubMed as PMID 41444381 — [PubMed](https://pubmed.ncbi.nlm.nih.gov/41444381/)
+- **Venue:** the Amirkabir University (AUT) bioinformatics group's page lists it as *Scientific Reports* 2025. Its URL slug says "mehrabani", but the snippet names Fatemeh Zare-Mirakabad. The full author list and the s41598 DOI were not verified — [AUT page](https://bioinformatics.aut.ac.ir/publication/2025-mehrabani-synergygraph-predicting-cell/)
+- **Method:** KG construction, then KG embedding learning, then hypergraph modelling. Modules are a BioEncoder, a **UniGAT** graph encoder (from the UniGNN framework) and a regression decoder. It is claimed to overcome pairwise limitations and reduce redundant effects of dual-drug combinations. Results are "superior" on a **small subset of DrugComb** — [AUT page (via search snippet)](https://bioinformatics.aut.ac.ir/publication/2025-mehrabani-synergygraph-predicting-cell/)
+- **Explanation:** no path-level explanation mentioned — [PubMed search summary](https://pubmed.ncbi.nlm.nih.gov/41444381/)
+
+#### 8. Closest real papers to "KG-Synergy, Zhang et al., BIB 2023"
+- **KGANSynergy** is by Ge Zhang et al., BIB 2023 24(3), so a "Zhang, BIB 2023, KG synergy" reference most likely means this paper — [dblp](https://dblp1.uni-trier.de/rec/journals/bib/ZhangGYWLLL23.html)
+- **Gu J, Bang D, Yi J, Lee S, Kim DK, Kim S.** "A model-agnostic framework to enhance knowledge graph-based drug combination prediction with drug-drug interaction data and supervised contrastive learning." *Brief Bioinform* 2023;24(5):bbad285. DOI 10.1093/bib/bbad285. It uses DDIs as reliable negatives and supervised contrastive learning to reshape KG drug embeddings, tested with random-walk and GNN embedders. The thesis version uses the multi-scale interactome (MSI) KG — [dblp](https://dblp1.uni-trier.de/rec/journals/bib/GuBYLKK23.html); [SNU S-Space](https://s-space.snu.ac.kr/handle/10371/196563)
+
+#### 9. SynDRep (KG embedding plus path-based check; a repurposing framing)
+- **Citation:** Shalaby KS, Rao SG, Schultz B, Hofmann-Apitius M, Kodamullil AT, Bharadhwaj VS. *Bioinform Adv* 2025;5(1):vbaf092. DOI 10.1093/bioadv/vbaf092. bioRxiv 2024.08.13.607713 — [PMC12148216](https://pmc.ncbi.nlm.nih.gov/articles/PMC12148216/)
+- **KG:** Human Brain Pharmacome, 136,838 nodes of 27 types and 731,974 edges of 72 relation types. A causal-only variant (COP) drops non-causal relations and disease hubs. Synergy data from DrugCombDB, DrugCombPortal and SYNERGxDB (ZIP scores; 23,171 pairs, 882 drugs) — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12148216/)
+- **Model:** PyKEEN KGEs (TransE, TransR, RotatE, ComplEx, HolE) plus classical ML. Random forest on COP embeddings reaches ROC-AUC 0.796 (10-fold nested CV) — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12148216/)
+- **Explanation:** a post-hoc NetworkX search for shared paths between candidate drugs and diseases (e.g., miconazole and albendazole share pathways with approved Alzheimer's drugs), checked against the literature. This is qualitative only — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12148216/)
+- **Limitations:** drug–drug top-rank accuracy on COP is only 54.65%, close to random. No connecting paths were found for schizophrenia or bipolar disorder. Data are cancer-biased. Code: https://github.com/SynDRep/SynDRep — [PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12148216/)
+
+#### 10. Other models (heterogeneous or not)
+- **CGMS:** treats each drug pair plus cell line as a **heterogeneous complete graph**, uses a heterogeneous graph attention network for order-independent embeddings, and trains multi-task on synergy and sensitivity. Published in Bioinformatics 2023 — [PMC10256571](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10256571/)
+- **DDoS:** **not** a heterogeneous or KG model. It is a molecular-graph GNN trained on Loewe, Bliss, HSA and ZIP plus majority vote, over 7 DrugComb-derived benchmarks, with AUPR 0.777–0.964. arXiv 2210.00802, reportedly published at CHIL 2024 — [arXiv](https://arxiv.org/abs/2210.00802)
+- **Adjacent path-explanation reference (DDI, not synergy):** KnowDDI (*Commun Med* 2024) learns knowledge subgraphs of "explaining paths" from large biomedical KGs. It is a useful design template for synergy path XAI — [Nature Commun Med](https://www.nature.com/articles/s43856-024-00486-y)
+- **Other heterogeneous or hypergraph synergy models seen in results but not profiled:**
+  - HIG-Syn (Bioinformatics 2025, doi 10.1093/bioinformatics/btaf215; hypergraph plus interaction-aware) — [PMC12261487](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12261487/)
+  - HERMES, "Heterogeneous entity representation for medicinal synergy prediction" (Bioinformatics, btae750) — [PMC11745903](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11745903/)
+  - An npj Digital Medicine 2026 "interpretable graph deep learning framework … functional and clinical similarities" — [Nature](https://www.nature.com/articles/s41746-026-02830-z)
+
+### Inferences
+- **The XAI spectrum in this group:** (a) true path/subgraph explainers: SDCInterpreter (PaGELink edge masks over a drug–gene–pathway–cell-line KG), the strongest fit for "Group 3"; (b) attention-weight inspection: HANSynergy, KGANSynergy, HGTSynergy; (c) post-hoc graph path search: SynDRep; (d) no explanation: MGAE-DC, HypergraphSynergy, SynergyGraph, CGMS. For a thesis, SDCInterpreter is the main baseline for path XAI. KGANSynergy and HANSynergy are attention-based comparators.
+- Only SDCInterpreter, judging by its repo scripts, appears to evaluate explanations quantitatively. Every other model's explanation is validated by case studies or literature checks, or indirectly by ablation. This is a clear gap a thesis could target, for example with path fidelity or sparsity metrics, or by recovering known pathway mechanisms against a ground truth.
+- The "5-layer directed graph virtual node→drug→target gene→pathway→cell line" description of SDCInterpreter is plausible given PaGELink, which needs directed paths between a source and target node pair; a virtual node would act as the single source. However, no source I accessed confirms the virtual node or the 5-layer layout. Treat it as unverified until the JCIM full text or the `Overview.jpg` in the repo has been checked.
+
+### Gaps
+- **SDCInterpreter:** exact datasets (O'Neil / DrugComb / DrugCombDB?), node and edge counts, data sources (DrugBank, KEGG, Reactome?), metric values, and the explanation evaluation metric. ACS returned 403 and DeepWiki returned 429. Check the full text or `Data/` and `eval_explanations.py` in the repo.
+- **HANSynergy and KGANSynergy:** full architecture, splits, limitations, code URLs, and KGANSynergy's metrics and KG entity types. OUP and ACS full text were not accessible.
+- **SynergyGraph:** full author list, DOI, KG sources, metrics, code. The AUT page refused connection, and the PubMed page served only a cookie wall.
+- **Not researched within the tool budget:** PoLo (path-based reasoning on Hetionet), DRKG-based combination models, "SynergyKG", and LLM+KG synergy hybrids. No verified claims are possible for these. CGMS authors and DOI were also not captured.
+- **Unconfirmed date:** whether DDoS is actually in CHIL 2024 proceedings rests only on the search summary.
