@@ -1,0 +1,4 @@
+src/data/raw/
+src/data/processed/
+runs/
+__pycache__/
