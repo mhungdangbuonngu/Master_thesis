@@ -17,3 +17,6 @@ data/processed/*.csv
 *.log
 node_modules/
 slide/qa/
+
+# File lock của LibreOffice/ONLYOFFICE khi mở pptx
+.~lock.*#
