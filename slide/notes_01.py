@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""Ghi note thuyết trình vào ô Notes của slide/01_kien_thuc_nen.pptx.
+"""Hai việc cho deck 01_kien_thuc_nen.pptx, chạy một lệnh:
 
-    python3 slide/add_notes_01.py
+    python3 slide/notes_01.py
 
-Script sửa trực tiếp file pptx đang có, không dựng lại deck, nên mọi thay đổi
-làm bằng PowerPoint hay LibreOffice đều được giữ nguyên. Chạy lại nhiều lần
-được: note cũ bị ghi đè chứ không nối thêm. Nó cũng xuất kèm bản markdown
-notes_01_kien_thuc_nen.md để in hoặc đọc khi tập nói.
+1. Đọc script_01_kien_thuc_nen.md rồi ghi lời đọc của từng slide vào ô Notes
+   của file pptx. File markdown là nguồn duy nhất: sửa lời nói thì sửa ở đó
+   rồi chạy lại script này.
+2. Xuất notes_01_kien_thuc_nen.md từ bảng NOTES bên dưới, là bản gợi ý cách
+   nhấn và cách chuyển slide, để đọc khi tập nói.
+
+Script sửa trực tiếp file pptx đang có, không dựng lại deck bằng build_01.py,
+nên mọi thay đổi làm bằng PowerPoint hay ONLYOFFICE đều được giữ nguyên. Chạy
+lại nhiều lần được: nội dung cũ bị ghi đè chứ không nối thêm.
 
 Ngân sách thời gian: 50 phút nói, chừa 10 phút hỏi đáp. Slide đánh dấu
 [CÓ THỂ BỎ] là chỗ cắt trước nếu bị hụt giờ.
@@ -19,6 +24,7 @@ from pathlib import Path
 from pptx import Presentation
 
 DECK = Path(__file__).with_name("01_kien_thuc_nen.pptx")
+SCRIPT = Path(__file__).with_name("script_01_kien_thuc_nen.md")
 HANDOUT = Path(__file__).with_name("notes_01_kien_thuc_nen.md")
 
 NOTES = {
@@ -436,6 +442,32 @@ Rồi mời câu hỏi.""",
 }
 
 
+def read_script() -> dict[int, str]:
+    """Tách lời đọc theo từng slide từ script_01_kien_thuc_nen.md.
+
+    Mỗi mục bắt đầu bằng '## Slide <số> · <tiêu đề> · ~<giây>s'. Thời lượng
+    được giữ lại ở đầu note để canh giờ khi nói.
+    """
+    text = SCRIPT.read_text(encoding="utf-8")
+    heads = list(re.finditer(r"^## Slide (\d+)\b([^\n]*)$", text, re.M))
+    if not heads:
+        raise SystemExit(f"Không tách được mục nào trong {SCRIPT.name}")
+
+    out: dict[int, str] = {}
+    for pos, head in enumerate(heads):
+        end = heads[pos + 1].start() if pos + 1 < len(heads) else len(text)
+        body = text[head.end():end].strip()
+        # chữ in nghiêng là việc làm, không phải việc nói: đổi sang ngoặc đơn
+        body = re.sub(r"\*([^*\n]+)\*", r"(\1)", body)
+        secs = re.search(r"~(\d+)s", head.group(2))
+        stamp = f"[~{secs.group(1)} giây] " if secs else ""
+        skippable = "bỏ được" in head.group(2)
+        if skippable:
+            stamp += "[CÓ THỂ BỎ] "
+        out[int(head.group(1))] = (stamp + body).strip()
+    return out
+
+
 def slide_title(slide, index: int) -> str:
     """Tiêu đề slide: ưu tiên placeholder tiêu đề, bỏ qua ô chỉ chứa số trang."""
     try:
@@ -453,14 +485,11 @@ def slide_title(slide, index: int) -> str:
 
 
 def write_handout(prs: Presentation) -> None:
+    """Xuất bản gợi ý cách nhấn, lấy từ bảng NOTES chứ không lấy từ ô Notes."""
     total = 0
     body = []
     for i, slide in enumerate(prs.slides, start=1):
-        note = (
-            slide.notes_slide.notes_text_frame.text.strip()
-            if slide.has_notes_slide
-            else ""
-        )
+        note = NOTES.get(i, "").strip()
         stamp = ""
         match = re.match(r"\[~(\d+) giây\]", note)
         if match:
@@ -470,14 +499,15 @@ def write_handout(prs: Presentation) -> None:
         body += [f"## Slide {i}: {slide_title(slide, i)}{stamp}", "", note, ""]
 
     head = [
-        "# Note thuyết trình: 01_kien_thuc_nen.pptx",
+        "# Gợi ý cách nhấn: 01_kien_thuc_nen.pptx",
         "",
-        "Bản xuất từ ô Notes của chính file pptx, do `slide/add_notes_01.py` sinh ra.",
-        "Sửa note thì sửa trong script rồi chạy lại, đừng sửa file này.",
+        "Bản này nói nên nhấn chỗ nào, chuyển slide thế nào, slide nào bỏ được.",
+        "Lời đọc đầy đủ nằm ở `script_01_kien_thuc_nen.md` và trong ô Notes của",
+        "chính file pptx. Cả hai file do `slide/notes_01.py` sinh ra, sửa trong",
+        "script rồi chạy lại chứ đừng sửa file này.",
         "",
-        f"Tổng thời lượng theo note: **{total // 60} phút {total % 60} giây**. "
-        "Hụt giờ thì bỏ ba slide",
-        "đánh dấu `[CÓ THỂ BỎ]` (21, 37, 42), còn khoảng 50 phút.",
+        f"Tổng thời lượng: **{total // 60} phút {total % 60} giây**. Hụt giờ thì bỏ",
+        "ba slide đánh dấu `[CÓ THỂ BỎ]` (21, 37, 42), còn khoảng 50 phút.",
         "",
         "---",
         "",
@@ -491,25 +521,33 @@ def main() -> int:
         print(f"Không tìm thấy {DECK}", file=sys.stderr)
         return 1
 
+    if not SCRIPT.exists():
+        print(f"Không tìm thấy {SCRIPT}", file=sys.stderr)
+        return 1
+
     prs = Presentation(DECK)
     n_slides = len(prs.slides)
-    if n_slides != len(NOTES):
-        print(
-            f"Cảnh báo: deck có {n_slides} slide nhưng script có note cho "
-            f"{len(NOTES)} slide. Kiểm tra lại trước khi tin kết quả.",
-            file=sys.stderr,
-        )
+    speech = read_script()
+
+    for name, table in (("lời đọc", speech), ("bảng NOTES", NOTES)):
+        if len(table) != n_slides:
+            print(
+                f"Cảnh báo: deck có {n_slides} slide nhưng {name} chỉ có "
+                f"{len(table)} mục. Kiểm tra lại trước khi tin kết quả.",
+                file=sys.stderr,
+            )
 
     written = 0
     for i, slide in enumerate(prs.slides, start=1):
-        note = NOTES.get(i)
-        if note is None:
+        text = speech.get(i)
+        if text is None:
+            print(f"Cảnh báo: slide {i} không có lời đọc.", file=sys.stderr)
             continue
-        slide.notes_slide.notes_text_frame.text = note.strip()
+        slide.notes_slide.notes_text_frame.text = text
         written += 1
 
     prs.save(DECK)
-    print(f"Đã ghi note cho {written}/{n_slides} slide vào {DECK.name}")
+    print(f"Đã ghi lời đọc cho {written}/{n_slides} slide vào {DECK.name}")
     write_handout(prs)
     return 0
 

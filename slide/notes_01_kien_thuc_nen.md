@@ -1,10 +1,12 @@
-# Note thuyết trình: 01_kien_thuc_nen.pptx
+# Gợi ý cách nhấn: 01_kien_thuc_nen.pptx
 
-Bản xuất từ ô Notes của chính file pptx, do `slide/add_notes_01.py` sinh ra.
-Sửa note thì sửa trong script rồi chạy lại, đừng sửa file này.
+Bản này nói nên nhấn chỗ nào, chuyển slide thế nào, slide nào bỏ được.
+Lời đọc đầy đủ nằm ở `script_01_kien_thuc_nen.md` và trong ô Notes của
+chính file pptx. Cả hai file do `slide/notes_01.py` sinh ra, sửa trong
+script rồi chạy lại chứ đừng sửa file này.
 
-Tổng thời lượng theo note: **53 phút 10 giây**. Hụt giờ thì bỏ ba slide
-đánh dấu `[CÓ THỂ BỎ]` (21, 37, 42), còn khoảng 50 phút.
+Tổng thời lượng: **53 phút 10 giây**. Hụt giờ thì bỏ
+ba slide đánh dấu `[CÓ THỂ BỎ]` (21, 37, 42), còn khoảng 50 phút.
 
 ---
 

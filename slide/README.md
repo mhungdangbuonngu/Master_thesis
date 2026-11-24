@@ -44,3 +44,20 @@ pdftoppm -jpeg -r 110 01_kien_thuc_nen.pdf qa/01
 `[Họ và tên]`, `[MSHV]`, `[Tên giảng viên]` ở slide bìa của cả hai file.
 
 `assets/hust_logo.png` là logo ngang trích từ template, chỉ dùng cho slide bìa.
+
+## Note thuyết trình cho deck 01
+
+`script_01_kien_thuc_nen.md` giữ lời đọc của cả 53 slide, là nguồn duy nhất.
+Sửa lời nói ở đó rồi chạy:
+
+```bash
+python3 slide/notes_01.py
+```
+
+Script đẩy lời đọc vào ô Notes của `01_kien_thuc_nen.pptx` và xuất lại
+`notes_01_kien_thuc_nen.md`, bản gợi ý cách nhấn và cách chuyển slide (nội dung
+nằm trong bảng `NOTES` của chính script).
+
+Script sửa trực tiếp file pptx, **không** dựng lại deck bằng `build_01.py`, nên
+phần deck đã sửa tay bằng PowerPoint hay ONLYOFFICE vẫn còn. Nếu deck đang mở ở
+máy khác thì đóng trước, không thì lần lưu sau sẽ ghi đè mất note.

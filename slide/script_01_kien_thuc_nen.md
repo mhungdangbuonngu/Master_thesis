@@ -4,8 +4,10 @@ Kịch bản nói cho 53 slide, tổng khoảng 50 phút. Đây là lời để 
 lời để đọc nguyên văn: cứ đổi chữ cho vào miệng mình. Chỗ in nghiêng là việc
 làm, không phải việc nói. Ba slide 21, 37, 42 bỏ được nếu hụt giờ.
 
-Note gợi ý cách nhấn và cách chuyển nằm trong ô Notes của chính file pptx, và
-trong `slide/notes_01_kien_thuc_nen.md`.
+File này là nguồn duy nhất của lời đọc. Sửa ở đây rồi chạy
+`python3 slide/notes_01.py` để đẩy vào ô Notes của file pptx.
+
+Gợi ý cách nhấn và cách chuyển slide nằm ở `slide/notes_01_kien_thuc_nen.md`.
 
 ---
 
