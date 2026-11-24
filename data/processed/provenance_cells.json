@@ -1,0 +1,12 @@
+{
+ "cells": 37,
+ "landmark_in_l1000": 978,
+ "landmark_in_depmap": 944,
+ "string_min_score": 700,
+ "string_nodes": 16201,
+ "string_edges": 236930,
+ "node2vec_dim": 128,
+ "genes_with_vector": 911,
+ "expr_mean": 4.838911533355713,
+ "expr_std": 1.9248453378677368
+}

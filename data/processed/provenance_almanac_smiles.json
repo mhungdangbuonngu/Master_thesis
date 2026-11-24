@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-23",
+ "drugs_total": 102,
+ "resolved": 101,
+ "unresolved": [],
+ "excluded": {
+  "CISPLATINO": "standardiser strips the Pt centre and nothing organic is left"
+ },
+ "by_tier": {
+  "cactus": 57,
+  "alias+cactus": 16,
+  "oneil": 14,
+  "unichem_curated": 6,
+  "alias+oneil": 4,
+  "unichem": 2,
+  "alias+unichem_curated": 1,
+  "excluded": 1,
+  "alias+manual": 1
+ },
+ "lost_atoms_in_standardisation": [
+  {
+   "drug": "ELOXATIN (TN) (SANOFI SYNTHELAB)",
+   "n_atoms_raw": 15.0,
+   "n_atoms": 8.0
+  }
+ ],
+ "duplicate_inchikey": [],
+ "shared_inchikeys_with_oneil": 21,
+ "triples_before": 239103,
+ "triples_with_smiles": 234333,
+ "triples_dropped_pct": 2.0
+}

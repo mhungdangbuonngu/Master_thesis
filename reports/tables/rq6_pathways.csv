@@ -1,0 +1,21 @@
+class,pathway,name,frac_triples
+ant,hsa05418,Fluid shear stress and atherosclerosis,0.1875
+ant,hsa04928,"Parathyroid hormone synthesis, secretion and action",0.18055555555555555
+ant,hsa04727,GABAergic synapse,0.175
+ant,hsa04156,Integrated stress response (ISR) signaling pathway,0.1625
+ant,hsa00270,Cysteine and methionine metabolism,0.15
+ant,hsa00310,Lysine degradation,0.15
+ant,hsa03320,PPAR signaling pathway,0.15
+ant,hsa04360,Axon guidance,0.15
+ant,hsa04935,"Growth hormone synthesis, secretion and action",0.15
+ant,hsa05032,Morphine addiction,0.15
+syn,hsa04932,Non-alcoholic fatty liver disease,0.325
+syn,hsa04380,Osteoclast differentiation,0.28
+syn,hsa04668,TNF signaling pathway,0.21000000000000002
+syn,hsa05323,Rheumatoid arthritis,0.19666666666666666
+syn,hsa03015,mRNA surveillance pathway,0.1955806451612903
+syn,hsa05133,Pertussis,0.195
+syn,hsa05134,Legionellosis,0.195
+syn,hsa04928,"Parathyroid hormone synthesis, secretion and action",0.1771774193548387
+syn,hsa04657,IL-17 signaling pathway,0.1766820276497696
+syn,hsa00620,Pyruvate metabolism,0.17622887864823347

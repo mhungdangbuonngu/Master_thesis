@@ -1,0 +1,25 @@
+{
+ "date": "2026-11-16",
+ "drugs_total": 38,
+ "resolved": 36,
+ "unresolved": [
+  "MK-4541",
+  "MRK-003"
+ ],
+ "by_tier": {
+  "chembl_id": 34,
+  "manual": 2,
+  "unresolved": 2
+ },
+ "duplicate_inchikey": [],
+ "no_public_structure": [
+  "MK-4541",
+  "MRK-003"
+ ],
+ "atoms_min": 8,
+ "atoms_max": 69,
+ "atoms_median": 29.0,
+ "triples_before": 21571,
+ "triples_with_smiles": 18870,
+ "triples_dropped_pct": 12.5
+}

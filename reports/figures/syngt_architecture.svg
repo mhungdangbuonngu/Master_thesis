@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 1620" width="1060" height="1620" font-family="DejaVu Sans, Arial, Helvetica, sans-serif">
+<defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="#44506b"/>
+  </marker>
+</defs>
+<style>
+  .bg{fill:#ffffff}
+  .lane{fill:#f4f6fa;stroke:#dfe4ee;stroke-width:1;rx:10}
+  .lanetxt{fill:#8a93a8;font-size:11px;font-weight:700;letter-spacing:1.2px}
+  .drug{fill:#e8f0fb;stroke:#4a74b8;stroke-width:1.6;rx:8}
+  .cell{fill:#eaf6ee;stroke:#3f8f5f;stroke-width:1.6;rx:8}
+  .enc{fill:#fdf3e3;stroke:#c8912f;stroke-width:1.6;rx:8}
+  .tr{fill:#f0eafb;stroke:#6f4fb0;stroke-width:1.8;rx:8}
+  .head{fill:#fdeaea;stroke:#b3391c;stroke-width:1.8;rx:8}
+  .out{fill:#ffffff;stroke:#27313f;stroke-width:2;rx:8}
+  .t{fill:#1d2430;font-size:14px;font-weight:700}
+  .s{fill:#55607a;font-size:11.5px}
+  .m{fill:#8a93a8;font-size:10.5px;font-style:italic}
+  .e{stroke:#44506b;stroke-width:1.7;fill:none;marker-end:url(#ar)}
+  .tag{fill:#b3391c;rx:4}
+  .tagt{fill:#ffffff;font-size:10px;font-weight:700}
+  .xt{fill:#b3391c;font-size:11.5px;font-weight:700}
+  .ttl{fill:#1d2430;font-size:21px;font-weight:700}
+  .sub{fill:#8a93a8;font-size:12.5px}
+</style>
+<rect class="bg" x="0" y="0" width="1060" height="1620"/>
+<text class="ttl" x="36" y="42">SynGT — kiến trúc</text>
+<text class="sub" x="36" y="64">GIN + hai transformer + đầu CORN thứ tự · 4.161.156 tham số huấn luyện · dự đoán ant &lt; add &lt; syn</text>
+
+<rect class="lane" x="24" y="88" width="1012" height="146"/>
+<text class="lanetxt" x="38" y="108">1 · ĐẦU VÀO</text>
+<rect class="lane" x="24" y="250" width="1012" height="150"/>
+<text class="lanetxt" x="38" y="270">2 · ĐẶC TRƯNG HÓA (không học)</text>
+<rect class="lane" x="24" y="416" width="1012" height="156"/>
+<text class="lanetxt" x="38" y="436">3 · BỘ MÃ HÓA → TOKEN</text>
+<rect class="lane" x="24" y="588" width="1012" height="150"/>
+<text class="lanetxt" x="38" y="608">4 · TRANSFORMER MỊN (nguyên tử ↔ gen)</text>
+<rect class="lane" x="24" y="754" width="1012" height="150"/>
+<text class="lanetxt" x="38" y="774">5 · TRANSFORMER THÔ (thuốc ↔ thuốc ↔ tế bào)</text>
+<rect class="lane" x="24" y="920" width="1012" height="152"/>
+<text class="lanetxt" x="38" y="940">6 · READOUT "SKIP"</text>
+<rect class="lane" x="24" y="1088" width="1012" height="200"/>
+<text class="lanetxt" x="38" y="1108">7 · ĐẦU RA THỨ TỰ (CORN)</text>
+
+<rect class="drug" x="70" y="122" width="210" height="92"/>
+<text class="t" x="88" y="148">Thuốc A — SMILES</text>
+<text class="s" x="88" y="170">chuẩn hóa RDKit</text>
+<text class="m" x="88" y="190">36 thuốc, 8–69 nguyên tử</text>
+<text class="m" x="88" y="206">(median 29)</text>
+
+<rect class="drug" x="300" y="122" width="210" height="92"/>
+<text class="t" x="318" y="148">Thuốc B — SMILES</text>
+<text class="s" x="318" y="170">cùng bộ mã hóa với A</text>
+<text class="m" x="318" y="190">dùng chung trọng số</text>
+<text class="m" x="318" y="206">→ đối xứng A↔B</text>
+
+<rect class="cell" x="620" y="122" width="330" height="92"/>
+<text class="t" x="638" y="148">Dòng tế bào ung thư</text>
+<text class="s" x="638" y="170">944 gen landmark L1000 (DepMap, log2 TPM+1)</text>
+<text class="m" x="638" y="190">z-score fit CHỈ trên dòng tế bào trong train</text>
+<text class="m" x="638" y="206">37 dòng, 7 loại mô</text>
+
+<rect class="enc" x="70" y="284" width="210" height="100"/>
+<text class="t" x="88" y="310">Đồ thị phân tử</text>
+<text class="s" x="88" y="331">nguyên tử = nút, liên kết = cạnh</text>
+<text class="s" x="88" y="349">đặc trưng nguyên tử 78 chiều:</text>
+<text class="m" x="88" y="366">ký hiệu 44 + bậc 11 + H 11</text>
+<text class="m" x="88" y="379">+ hóa trị 11 + thơm 1</text>
+
+<rect class="enc" x="300" y="284" width="210" height="100"/>
+<text class="t" x="318" y="310">Morgan fingerprint</text>
+<text class="s" x="318" y="331">r = 2, 2048 bit</text>
+<text class="s" x="318" y="349">tiên nghiệm hóa học,</text>
+<text class="m" x="318" y="366">bỏ qua đồ thị — nhánh riêng</text>
+<text class="m" x="318" y="379">median 54 bit bật</text>
+
+<rect class="enc" x="620" y="284" width="330" height="100"/>
+<text class="t" x="638" y="310">Vector biểu hiện + node2vec</text>
+<text class="s" x="638" y="331">mỗi gen: [node2vec 128 chiều ‖ giá trị biểu hiện 1]</text>
+<text class="s" x="638" y="349">node2vec huấn luyện trên mạng PPI STRING (≥700)</text>
+<text class="m" x="638" y="366">16.201 nút, 236.930 cạnh · 911/944 gen có vector</text>
+<text class="m" x="638" y="379">đóng băng, không cập nhật khi train</text>
+
+<rect class="enc" x="70" y="450" width="210" height="104"/>
+<text class="t" x="88" y="476">GIN · 2 lớp, d=256</text>
+<text class="s" x="88" y="497">h ← MLP((1+ε)h + Σ h_lân cận)</text>
+<text class="s" x="88" y="515">residual + LayerNorm</text>
+<text class="m" x="88" y="533">547.074 tham số (13%)</text>
+<text class="m" x="88" y="547">ra: 1 token / nguyên tử</text>
+<rect class="tag" x="214" y="522" width="58" height="17"/>
+<text class="tagt" x="220" y="534">μ_atom</text>
+
+<rect class="enc" x="300" y="450" width="210" height="104"/>
+<text class="t" x="318" y="476">fp_mlp</text>
+<text class="s" x="318" y="497">2048 → 256 → d</text>
+<text class="s" x="318" y="515">cộng vào vector thuốc</text>
+<text class="m" x="318" y="533">590.336 tham số (14%)</text>
+<text class="m" x="318" y="547">mang 51–55% quyết định</text>
+<rect class="tag" x="456" y="522" width="46" height="17"/>
+<text class="tagt" x="462" y="534">μ_fp</text>
+
+<rect class="enc" x="620" y="450" width="155" height="104"/>
+<text class="t" x="636" y="476">gene_in</text>
+<text class="s" x="636" y="497">129 → d</text>
+<text class="s" x="636" y="515">→ 944 token gen</text>
+<text class="m" x="636" y="533">33.280 tham số</text>
+<rect class="tag" x="703" y="462" width="60" height="17"/>
+<text class="tagt" x="709" y="474">μ_gene</text>
+
+<rect class="cell" x="795" y="450" width="155" height="104"/>
+<text class="t" x="811" y="476">cell_mlp</text>
+<text class="s" x="811" y="497">944→512→256→d</text>
+<text class="s" x="811" y="515">1 vector / tế bào</text>
+<text class="m" x="811" y="533">680.960 tham số</text>
+
+<rect class="tr" x="70" y="622" width="880" height="100"/>
+<text class="t" x="90" y="648">Transformer mịn — 2 lớp, 4 đầu, pre-LayerNorm, FF 256</text>
+<text class="s" x="90" y="670">chuỗi: [ CLS_f │ nguyên tử A (≤69) │ nguyên tử B (≤69) │ 944 token gen ] → tối đa 1083 token</text>
+<text class="s" x="90" y="688">nguyên tử A và B dùng CÙNG type embedding (id 1), gen dùng id 2 → không có gì phân biệt A với B</text>
+<text class="m" x="90" y="708">SDPA hợp nhất khi train (không tạo ma trận 1083×1083); softmax tường minh chỉ khi XAI cần trọng số · 791.552 tham số (19%)</text>
+
+<rect class="tr" x="70" y="788" width="880" height="100"/>
+<text class="t" x="90" y="814">Transformer thô — 2 lớp, 4 đầu</text>
+<text class="s" x="90" y="836">chuỗi 4 token: [ CLS_c │ p_A │ p_B │ tế bào ]      p_A = mean(nguyên tử A) + fp_mlp(fp_A)</text>
+<text class="s" x="90" y="854">p_A và p_B dùng chung type id 1 → hoán đổi A↔B chỉ đổi thứ tự hai token cùng loại, kết quả không đổi</text>
+<text class="m" x="90" y="874">mô hình tương tác ở mức phân tử, không phải mức nguyên tử · 791.552 tham số (19%)</text>
+
+<rect class="out" x="70" y="954" width="880" height="98"/>
+<text class="t" x="90" y="980">Nối 5 khối × 256 = 1280 chiều</text>
+<text class="s" x="90" y="1002">[ CLS_f ‖ CLS_c ‖ p_A + p_B ‖ |p_A − p_B| ‖ cell_mlp(expr) ]</text>
+<text class="m" x="90" y="1022">cả 5 khối đều đối xứng A↔B (tổng và trị tuyệt đối của hiệu). Ba khối cuối là đường đi thẳng:</text>
+<text class="m" x="90" y="1040">đầu ra không phải đi hết qua attention — chính thay đổi này đưa QWK từ 0,483 lên 0,589</text>
+
+<rect class="head" x="70" y="1126" width="420" height="88"/>
+<text class="t" x="88" y="1152">MLP đầu ra</text>
+<text class="s" x="88" y="1174">LayerNorm → 1280 → 512 → ReLU → 128 → ReLU</text>
+<text class="m" x="88" y="1194">724.096 tham số (17%)</text>
+
+<rect class="head" x="520" y="1126" width="430" height="88"/>
+<text class="t" x="538" y="1152">Đầu CORN — 2 logit CÓ ĐIỀU KIỆN</text>
+<text class="s" x="538" y="1174">ℓ₀ → q₀ = P(y &gt; ant)   ℓ₁ → q₁ = P(y &gt; add │ y &gt; ant)</text>
+<text class="m" x="538" y="1194">chỉ 258 tham số</text>
+
+<rect class="out" x="70" y="1232" width="880" height="42"/>
+<text class="s" x="90" y="1250">P(ant) = 1 − q₀   ·   P(add) = q₀(1 − q₁)   ·   P(syn) = q₀q₁</text>
+<text class="m" x="90" y="1266">xác suất lũy tích không bao giờ cắt nhau → thứ tự ant &lt; add &lt; syn đúng theo CẤU TRÚC, không phải học được</text>
+
+<path class="e" d="M 175 214 L 175 284"/>
+<path class="e" d="M 405 214 L 405 284"/>
+<path class="e" d="M 700 214 L 700 284"/>
+<path class="e" d="M 880 214 L 880 284"/>
+<path class="e" d="M 175 384 L 175 450"/>
+<path class="e" d="M 405 384 L 405 450"/>
+<path class="e" d="M 698 384 L 698 450"/>
+<path class="e" d="M 880 384 L 880 450"/>
+<path class="e" d="M 175 554 L 175 622"/>
+<path class="e" d="M 698 554 L 698 622"/>
+<path class="e" d="M 175 722 L 175 788"/>
+<path class="e" d="M 405 554 C 405 580, 450 585, 450 788"/>
+<path class="e" d="M 872 554 C 872 600, 760 600, 760 788"/>
+<path class="e" d="M 510 888 L 510 954"/>
+<path class="e" d="M 300 1052 L 300 1126"/>
+<path class="e" d="M 490 1170 L 520 1170"/>
+<path class="e" d="M 735 1214 L 735 1232"/>
+<path class="e" d="M 950 672 C 1004 672, 1004 1000, 950 1000"/>
+<text class="m" x="1000" y="836" transform="rotate(90 1000 836)">CLS_f</text>
+
+<text class="xt" x="36" y="1332">Ba điểm cắm mặt nạ cho XAI — nhãn đỏ trên sơ đồ ở lớp 3</text>
+<text class="s" x="36" y="1356">μ_atom · tắt từng nguyên tử hoặc từng mảnh BRICS (median 4,5 mảnh mỗi thuốc)</text>
+<text class="s" x="36" y="1376">μ_fp · tắt nhánh fingerprint, để đo phần quyết định đi qua đồ thị so với phần đi qua fingerprint</text>
+<text class="s" x="36" y="1396">μ_gene · tắt từng gen trong 944 gen; μ = 0 đặt gen về trung bình train, đúng baseline mà Integrated Gradients cần</text>
+<text class="s" x="36" y="1424">Ba mục tiêu quy gán: z_syn (logit) · z_syn − z_add (contrast, bằng ĐÚNG ℓ₁) · z_ant − z_add (ant)</text>
+<text class="s" x="36" y="1444">z_c = log P(c) tính bằng log-sigmoid nên không bao giờ bão hòa — chi tiết này quyết định tính đúng của mọi quy gán</text>
+<text class="m" x="36" y="1476">Đóng băng, không huấn luyện: gene_emb (944×128) và drug_fp (36×2048)</text>
+<text class="m" x="36" y="1496">Ablation xác nhận: bỏ cả hai transformer QWK 0,591 ≈ đầy đủ 0,589 · readout CLS-only 0,483 · bỏ fingerprint 0,565</text>
+<text class="m" x="36" y="1516">Nguồn: src/model/syngt.py, src/model/corn.py, src/data/featurize.py, src/data/cell.py</text>
+</svg>

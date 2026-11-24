@@ -2,3 +2,18 @@ src/data/raw/
 src/data/processed/
 runs/
 __pycache__/
+
+# Kết quả chạy: hàng nghìn checkpoint, tổng ~6,7 GB
+runs_*/
+
+# Dữ liệu đã tiền xử lý: tensor và bảng triple quá lớn cho git
+data/raw/
+data/processed/*.pt
+data/processed/*.csv
+!data/processed/smiles.csv
+!data/processed/almanac_smiles.csv
+
+# Log và phụ trợ
+*.log
+node_modules/
+slide/qa/

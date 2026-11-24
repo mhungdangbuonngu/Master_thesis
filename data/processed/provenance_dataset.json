@@ -1,0 +1,51 @@
+{
+ "triples": 18870,
+ "drugs": 36,
+ "cells": 37,
+ "pairs": 510,
+ "tissues": [
+  "Bowel",
+  "Breast",
+  "Lung",
+  "Ovary/Fallopian Tube",
+  "Pleura",
+  "Prostate",
+  "Skin"
+ ],
+ "loewe": {
+  "bin_gap_rows": 12223,
+  "bin_gap_dropped_pct": 35.2,
+  "ord3_counts": [
+   4391,
+   13207,
+   1272
+  ]
+ },
+ "bliss": {
+  "bin_gap_rows": 9493,
+  "bin_gap_dropped_pct": 49.7,
+  "ord3_counts": [
+   821,
+   16386,
+   1663
+  ]
+ },
+ "zip": {
+  "bin_gap_rows": 8927,
+  "bin_gap_dropped_pct": 52.7,
+  "ord3_counts": [
+   467,
+   16923,
+   1480
+  ]
+ },
+ "hsa": {
+  "bin_gap_rows": 7601,
+  "bin_gap_dropped_pct": 59.7,
+  "ord3_counts": [
+   428,
+   15039,
+   3403
+  ]
+ }
+}

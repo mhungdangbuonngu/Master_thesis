@@ -1,0 +1,181 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Kiến trúc SynGT</title>
+<style>
+@page { size: 1520px 1130px; margin: 0 }
+html,body { margin:0; background:#fff }
+svg { display:block; font-family: "Segoe UI", "Noto Sans", "DejaVu Sans", Arial, sans-serif }
+.b  { font-weight:700 }
+.t  { font-size:14px; fill:#1d1d1d }
+.s  { font-size:12px; fill:#333 }
+.xs { font-size:11px; fill:#444 }
+.m  { font-family: "DejaVu Sans Mono", Consolas, monospace; font-size:11px; fill:#222 }
+.sec{ font-size:17px; font-weight:700; fill:#222 }
+.ln { stroke:#444; stroke-width:1.6; fill:none }
+.sep{ stroke:#9a9a9a; stroke-width:1.5; stroke-dasharray:9 6 }
+</style></head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1130" viewBox="0 0 1520 1130">
+<defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#444"/></marker>
+  <marker id="arp" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7d5ba6"/></marker>
+  <!-- one pre-norm transformer block, drawn at origin; module box is 300 x 285 -->
+  <g id="block">
+    <rect x="0" y="0" width="300" height="285" rx="22" fill="#eef5e6"/>
+    <!-- main path -->
+    <line class="ln" x1="150" y1="285" x2="150" y2="263" marker-end="url(#ar)"/>
+    <rect x="60" y="237" width="180" height="26" rx="4" fill="#cfe3ea" stroke="#5f8fa0"/>
+    <text class="s" x="150" y="255" text-anchor="middle">LayerNorm</text>
+    <line class="ln" x1="150" y1="237" x2="150" y2="225" marker-end="url(#ar)"/>
+    <rect x="60" y="183" width="180" height="42" rx="4" fill="#fbe7b5" stroke="#b9963f"/>
+    <text class="s" x="150" y="201" text-anchor="middle">Multi-Head Attention</text>
+    <text class="xs" x="150" y="217" text-anchor="middle">4 head, d = 128</text>
+    <line class="ln" x1="150" y1="183" x2="150" y2="168" marker-end="url(#ar)"/>
+    <circle cx="150" cy="157" r="11" fill="#fff" stroke="#444" stroke-width="1.5"/>
+    <text class="t" x="150" y="162" text-anchor="middle">+</text>
+    <line class="ln" x1="150" y1="146" x2="150" y2="131" marker-end="url(#ar)"/>
+    <rect x="60" y="105" width="180" height="26" rx="4" fill="#cfe3ea" stroke="#5f8fa0"/>
+    <text class="s" x="150" y="123" text-anchor="middle">LayerNorm</text>
+    <line class="ln" x1="150" y1="105" x2="150" y2="93" marker-end="url(#ar)"/>
+    <rect x="60" y="55" width="180" height="38" rx="4" fill="#dbe9ef" stroke="#5f8fa0"/>
+    <text class="s" x="150" y="71" text-anchor="middle">Feed-forward</text>
+    <text class="xs" x="150" y="86" text-anchor="middle">128 → 256 → 128, ReLU</text>
+    <line class="ln" x1="150" y1="55" x2="150" y2="40" marker-end="url(#ar)"/>
+    <circle cx="150" cy="29" r="11" fill="#fff" stroke="#444" stroke-width="1.5"/>
+    <text class="t" x="150" y="34" text-anchor="middle">+</text>
+    <!-- residuals -->
+    <polyline class="ln" points="150,274 268,274 268,157 161,157" marker-end="url(#ar)"/>
+    <polyline class="ln" points="150,140 268,140 268,29 161,29" marker-end="url(#ar)"/>
+  </g>
+</defs>
+
+<!-- ============ separators & section labels ============ -->
+<line class="sep" x1="15" y1="258" x2="1505" y2="258"/>
+<line class="sep" x1="15" y1="577" x2="1505" y2="577"/>
+<text class="sec" x="1270" y="135">Tổng hợp và dự đoán</text>
+<text class="sec" x="1270" y="415">Hai module</text>
+<text class="sec" x="1270" y="437">transformer</text>
+<text class="sec" x="1270" y="880">Đầu vào và</text>
+<text class="sec" x="1270" y="902">tiền xử lý</text>
+
+<!-- ============ top: aggregate & predict ============ -->
+<rect x="470" y="18" width="260" height="42" rx="8" fill="#fff" stroke="#333" stroke-width="1.6"/>
+<text class="t b" x="600" y="44" text-anchor="middle">Dự đoán: ant &lt; add &lt; syn</text>
+<line class="ln" x1="600" y1="82" x2="600" y2="62" marker-end="url(#ar)"/>
+<rect x="455" y="82" width="290" height="44" rx="6" fill="#f4cccc" stroke="#b04a4a"/>
+<text class="t b" x="600" y="100" text-anchor="middle">CORN head (ordinal)</text>
+<text class="xs" x="600" y="117" text-anchor="middle">2 logit có điều kiện: P(y &gt; ant), P(y &gt; add | y &gt; ant)</text>
+<line class="ln" x1="600" y1="145" x2="600" y2="128" marker-end="url(#ar)"/>
+<rect x="515" y="145" width="170" height="34" rx="6" fill="#a9c98b" stroke="#5b7f3a"/>
+<text class="t b" x="600" y="167" text-anchor="middle">MLP  512 → 128</text>
+<line class="ln" x1="600" y1="196" x2="600" y2="181" marker-end="url(#ar)"/>
+<rect x="400" y="196" width="400" height="44" rx="6" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text class="t b" x="600" y="214" text-anchor="middle">Concatenation</text>
+<text class="m" x="600" y="231" text-anchor="middle">[CLS_f ; CLS_c ; pA+pB ; |pA−pB| ; cell]</text>
+
+<!-- module outputs -> concat -->
+<polyline class="ln" points="300,286 300,218 398,218" marker-end="url(#ar)"/>
+<polyline class="ln" points="880,286 880,218 802,218" marker-end="url(#ar)"/>
+<text class="xs" x="308" y="250">CLS_f</text>
+<text class="xs" x="888" y="250">CLS_c</text>
+
+<!-- ============ middle: two transformers ============ -->
+<use href="#block" x="150" y="286"/>
+<rect x="150" y="286" width="300" height="285" rx="22" fill="none" stroke="#d24b4b" stroke-width="2.2" stroke-dasharray="8 5"/>
+<text class="t b" x="463" y="434">×2</text>
+<text class="t b" x="25" y="395">Module mịn</text>
+<text class="s" x="25" y="414">(fine-granularity)</text>
+<text class="xs" x="25" y="436">nguyên tử ↔ gen,</text>
+<text class="xs" x="25" y="451">2·n_atom + 979 token</text>
+
+<use href="#block" x="730" y="286"/>
+<rect x="730" y="286" width="300" height="285" rx="22" fill="none" stroke="#3aa0c8" stroke-width="2.2" stroke-dasharray="8 5"/>
+<text class="t b" x="1043" y="434">×2</text>
+<text class="t b" x="1043" y="300">Module thô</text>
+<text class="s" x="1043" y="319">(coarse-</text>
+<text class="s" x="1043" y="335">granularity)</text>
+<text class="xs" x="1043" y="356">thuốc ↔ cell,</text>
+<text class="xs" x="1043" y="371">4 token</text>
+
+<!-- ============ bottom: inputs & preprocessing ============ -->
+<!-- fine path -->
+<line class="ln" x1="300" y1="701" x2="300" y2="573" marker-end="url(#ar)"/>
+<rect x="306" y="600" width="292" height="40" rx="4" fill="#fff" opacity="0.9"/>
+<text class="s" x="312" y="616">[CLS_f | nguyên tử A | nguyên tử B | 978 gen]</text>
+<text class="xs" x="312" y="632">+ type embedding (A và B chung một type)</text>
+<circle cx="300" cy="712" r="11" fill="#fff" stroke="#444" stroke-width="1.5"/>
+<text class="t" x="300" y="717" text-anchor="middle">⊕</text>
+<text class="t b" x="318" y="717">concat</text>
+<rect x="30" y="684" width="240" height="56" rx="4" fill="#f6c9c9" stroke="#c0504d"/>
+<text class="t b" x="150" y="704" text-anchor="middle">Gene token (978 gen L1000)</text>
+<text class="xs" x="150" y="721" text-anchor="middle">Linear([node2vec STRING v12 ; biểu hiện</text>
+<text class="xs" x="150" y="734" text-anchor="middle">của gen trong cell line]) → 128</text>
+<line class="ln" x1="270" y1="712" x2="287" y2="712" marker-end="url(#ar)"/>
+<line class="ln" x1="300" y1="880" x2="300" y2="725" marker-end="url(#ar)"/>
+<text class="xs" x="308" y="810">embedding từng nguyên tử</text>
+<text class="xs" x="308" y="824">(N_atom × 128)</text>
+
+<!-- coarse path -->
+<line class="ln" x1="880" y1="701" x2="880" y2="573" marker-end="url(#ar)"/>
+<rect x="886" y="600" width="250" height="40" rx="4" fill="#fff" opacity="0.9"/>
+<text class="m" x="892" y="616">[CLS_c | pA | pB | cell]</text>
+<text class="xs" x="892" y="632">+ type embedding (A và B chung một type)</text>
+<circle cx="880" cy="712" r="11" fill="#fff" stroke="#444" stroke-width="1.5"/>
+<text class="t" x="880" y="717" text-anchor="middle">⊕</text>
+<text class="t b" x="862" y="717" text-anchor="end">concat</text>
+<rect x="990" y="688" width="215" height="48" rx="4" fill="#dcc9ef" stroke="#7d5ba6"/>
+<text class="t b" x="1097" y="707" text-anchor="middle">Biểu hiện gen cell line</text>
+<text class="xs" x="1097" y="724" text-anchor="middle">978 gen → MLP 512 → 256 → 128</text>
+<line class="ln" x1="990" y1="712" x2="893" y2="712" marker-end="url(#ar)"/>
+
+<line class="ln" x1="880" y1="774" x2="880" y2="725" marker-end="url(#ar)"/>
+<text class="xs" x="872" y="770" text-anchor="end">pA, pB</text>
+<circle cx="880" cy="785" r="11" fill="#fff" stroke="#444" stroke-width="1.5"/>
+<text class="t" x="880" y="790" text-anchor="middle">+</text>
+<rect x="990" y="766" width="215" height="40" rx="4" fill="#fde3c8" stroke="#c98a3c"/>
+<text class="t b" x="1097" y="783" text-anchor="middle">Morgan FP (r = 2, 2048 bit)</text>
+<text class="xs" x="1097" y="799" text-anchor="middle">MLP 2048 → 256 → 128</text>
+<line class="ln" x1="990" y1="785" x2="893" y2="785" marker-end="url(#ar)"/>
+<line class="ln" x1="880" y1="815" x2="880" y2="798" marker-end="url(#ar)"/>
+<rect x="790" y="815" width="180" height="34" rx="6" fill="#fff" stroke="#333" stroke-width="1.4"/>
+<text class="t" x="880" y="837" text-anchor="middle">Mean pooling</text>
+<line class="ln" x1="880" y1="880" x2="880" y2="851" marker-end="url(#ar)"/>
+
+<!-- skip readout -->
+<circle cx="880" cy="755" r="3.5" fill="#7d5ba6"/>
+<polyline points="880,755 1232,755 1232,226 802,226" fill="none" stroke="#7d5ba6" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#arp)"/>
+<text class="xs" x="1225" y="500" text-anchor="middle" transform="rotate(-90 1225 500)" fill="#7d5ba6">readout "skip": pA+pB, |pA−pB|, cell (đi thẳng tới đầu ra)</text>
+
+<!-- shared GIN encoder -->
+<polyline class="ln" points="380,895 380,880 300,880"/>
+<polyline class="ln" points="380,880 880,880"/>
+<rect x="270" y="895" width="220" height="46" rx="6" fill="#cfeaf5" stroke="#3a8fb7" stroke-width="1.5"/>
+<text class="t b" x="380" y="914" text-anchor="middle">GIN × 3 (d = 128)</text>
+<text class="xs" x="380" y="931" text-anchor="middle">dùng chung trọng số cho A và B</text>
+<line class="ln" x1="380" y1="963" x2="380" y2="943" marker-end="url(#ar)"/>
+<rect x="265" y="963" width="230" height="40" rx="4" fill="#fff" stroke="#888"/>
+<text class="s" x="380" y="980" text-anchor="middle">RDKit → đồ thị phân tử</text>
+<text class="xs" x="380" y="995" text-anchor="middle">nút = nguyên tử (78 đặc trưng)</text>
+<!-- bracket from drugs -->
+<polyline class="ln" points="285,1035 285,1020 475,1020 475,1035"/>
+<line class="ln" x1="380" y1="1020" x2="380" y2="1005" marker-end="url(#ar)"/>
+<rect x="195" y="1035" width="180" height="30" rx="4" fill="#fdf3c4" stroke="#b9963f"/>
+<text class="m" x="285" y="1054" text-anchor="middle">O=c1[nH]cc(F)c(=O)[nH]1</text>
+<rect x="385" y="1035" width="180" height="30" rx="4" fill="#fdf3c4" stroke="#b9963f"/>
+<text class="m" x="475" y="1054" text-anchor="middle">Cn1nnc2c(C(N)=O)ncn2c1=O</text>
+<text class="t b" x="285" y="1086" text-anchor="middle">Thuốc A</text>
+<text class="t b" x="475" y="1086" text-anchor="middle">Thuốc B</text>
+
+<!-- legend: what differs from DTSyn -->
+<rect x="1255" y="940" width="250" height="160" rx="6" fill="#fafafa" stroke="#bbb"/>
+<text class="s b" x="1267" y="960">Khác DTSyn ở ba chỗ</text>
+<text class="xs" x="1267" y="981">1. GIN thay cho GCN 2 lớp</text>
+<text class="xs" x="1267" y="997">   (GCN giữ lại làm ablation).</text>
+<text class="xs" x="1267" y="1017">2. Không có embedding riêng cho</text>
+<text class="xs" x="1267" y="1033">   vị trí A/B, nên f(A,B,c) = f(B,A,c)</text>
+<text class="xs" x="1267" y="1049">   đúng theo cấu trúc.</text>
+<text class="xs" x="1267" y="1069">3. Đầu ra ordinal CORN 3 lớp</text>
+<text class="xs" x="1267" y="1085">   thay cho phân loại nhị phân.</text>
+</svg>
+</body></html>

@@ -1,0 +1,11 @@
+{
+ "drugs": 36,
+ "atom_dim": 78,
+ "atoms_min": 8,
+ "atoms_max": 69,
+ "atoms_median": 29.0,
+ "frags_min": 1,
+ "frags_max": 13,
+ "frags_median": 4.5,
+ "fp2_bits_on_median": 54.5
+}

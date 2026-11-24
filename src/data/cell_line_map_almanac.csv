@@ -1,0 +1,61 @@
+drugcomb_name,model_id,depmap_name,match,note
+786-0,ACH-000649,786-O,exact,
+A498,ACH-000555,A498,exact,
+A549,ACH-000681,A549,exact,
+ACHN,ACH-000046,ACHN,exact,
+BT-549,ACH-000288,BT549,exact,
+CAKI-1,ACH-000433,CAKI1,exact,
+CCRF-CEM,ACH-001738,CCRF-CEM,none,in DepMap but no expression profile
+COLO 205,ACH-001039,COLO 205,none,in DepMap but no expression profile
+DU-145,ACH-000979,DU145,exact,
+EKVX,ACH-000706,EKVX,exact,
+HCC-2998,ACH-001081,HCC2998,none,in DepMap but no expression profile
+HCT-15,ACH-000997,HCT15,exact,
+HCT116,ACH-000971,HCT 116,exact,
+HL-60(TB),ACH-000002,HL-60,exact,(TB) is the NCI tumour-bank stock of HL-60; one DepMap entry
+HOP-62,ACH-000861,HOP62,exact,
+HOP-92,ACH-000825,HOP92,exact,
+HS 578T,ACH-000148,HS 578T,exact,
+HT29,ACH-000552,HT-29,exact,
+IGROV1,ACH-000966,IGROV1,exact,
+K-562,ACH-000551,K562,exact,
+KM12,ACH-000969,KM12,exact,
+LOX IMVI,ACH-000750,LOXIMVI,exact,
+M14,ACH-002159,M14,none,in DepMap but no expression profile
+MALME-3M,ACH-000477,MALME-3M,exact,
+MCF7,ACH-000019,MCF7,exact,
+MDA-MB-231,ACH-000768,MDA-MB-231,exact,
+MDA-MB-435,ACH-000884,MDA-MB-435S,sibling,MDA-MB-435S is the DepMap subline; the line is melanoma and shares its patient with M14 (M14 has no expression here)
+MDA-MB-468,ACH-000849,MDA-MB-468,exact,
+MOLT-4,ACH-001127,MOLT-4,none,in DepMap but no expression profile
+NCI-H226,ACH-000367,NCI-H226,exact,
+NCI-H322M,ACH-002172,NCI-H322M,none,in DepMap but no expression profile
+NCI-H460,ACH-000463,NCI-H460,exact,
+NCI-H522,ACH-000343,NCI-H522,exact,
+NCI/ADR-RES,,,none,not in DepMap; doxorubicin-resistant derivative of OVCAR-8 and reusing OVCAR-8 expression would make two cells identical inputs
+NCIH23,ACH-000900,NCI-H23,exact,
+OVCAR-4,ACH-000617,OVCAR-4,exact,
+OVCAR-5,ACH-001151,OVCAR-5,exact,
+OVCAR-8,ACH-000696,OVCAR-8,exact,
+OVCAR3,ACH-000001,NIH:OVCAR-3,exact,
+PC-3,ACH-000090,PC-3,exact,
+RPMI-8226,ACH-000817,RPMI-8226,exact,
+RXF 393,ACH-002195,RXF393,none,in DepMap but no expression profile
+SF-268,ACH-000655,SF268,exact,
+SF-295,ACH-000376,SF295,exact,
+SF-539,ACH-000273,SF539,exact,
+SK-MEL-2,ACH-001190,SK-MEL-2,exact,
+SK-MEL-28,ACH-000615,SK-MEL-28,exact,
+SK-MEL-5,ACH-000730,SK-MEL-5,exact,
+SK-OV-3,ACH-000811,SK-OV-3,exact,
+SN12C,ACH-002199,SN12C,none,in DepMap but no expression profile
+SNB-19,ACH-001198,SNB19,none,in DepMap but no expression profile
+SNB-75,ACH-000504,SNB75,exact,
+SR,ACH-000338,SR-786,alias,Cellosaurus CVCL_1711 lists SR-786 and SR786 as synonyms of the NCI-60 line SR
+SW-620,ACH-000651,SW 620,exact,
+T-47D,ACH-000147,T-47D,exact,
+TK-10,ACH-001208,TK-10,none,in DepMap but no expression profile
+U251,ACH-000232,U-251 MG,exact,
+UACC-257,ACH-000579,UACC-257,exact,
+UACC62,ACH-000425,UACC-62,exact,
+UO-31,ACH-000428,UO-31,exact,

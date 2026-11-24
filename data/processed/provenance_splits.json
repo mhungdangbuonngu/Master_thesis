@@ -1,0 +1,204 @@
+{
+ "seed": 0,
+ "triples": 18870,
+ "drug_cluster_sizes": [
+  8,
+  8,
+  8,
+  8,
+  4
+ ],
+ "drug_clusters": {
+  "0": [
+   "AZD1775",
+   "DOXORUBICIN",
+   "GELDANAMYCIN",
+   "LAPATINIB",
+   "MK-8669",
+   "PACLITAXEL",
+   "VINBLASTINE",
+   "VINORELBINE"
+  ],
+  "1": [
+   "BEZ-235",
+   "DASATINIB",
+   "DINACICLIB",
+   "ERLOTINIB",
+   "ETOPOSIDE",
+   "MK-5108",
+   "SUNITINIB",
+   "TOPOTECAN"
+  ],
+  "2": [
+   "BORTEZOMIB",
+   "DEXAMETHASONE",
+   "L778123",
+   "METHOTREXATE",
+   "MITOMYCINE",
+   "MK-2206",
+   "SN-38",
+   "SORAFENIB"
+  ],
+  "3": [
+   "5-FU",
+   "ABT-888",
+   "GEMCITABINE",
+   "MK-4827",
+   "MK-8776",
+   "PD325901",
+   "TEMOZOLOMIDE",
+   "ZOLINZA"
+  ],
+  "4": [
+   "CARBOPLATIN",
+   "CYCLOPHOSPHAMIDE",
+   "METFORMIN",
+   "OXALIPLATIN"
+  ]
+ },
+ "random": [
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  },
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  },
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  },
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  },
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  }
+ ],
+ "leave_combo": [
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  },
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  },
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  },
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  },
+  {
+   "train": 11322,
+   "val": 3774,
+   "test": 3774
+  }
+ ],
+ "leave_cell": [
+  {
+   "train": 10710,
+   "val": 4080,
+   "test": 4080
+  },
+  {
+   "train": 11220,
+   "val": 3570,
+   "test": 4080
+  },
+  {
+   "train": 11730,
+   "val": 3570,
+   "test": 3570
+  },
+  {
+   "train": 11730,
+   "val": 3570,
+   "test": 3570
+  },
+  {
+   "train": 11220,
+   "val": 4080,
+   "test": 3570
+  }
+ ],
+ "leave_tumor": [
+  {
+   "train": 14790,
+   "val": 3060,
+   "test": 1020
+  },
+  {
+   "train": 11730,
+   "val": 4080,
+   "test": 3060
+  },
+  {
+   "train": 11220,
+   "val": 3570,
+   "test": 4080
+  },
+  {
+   "train": 12750,
+   "val": 2550,
+   "test": 3570
+  },
+  {
+   "train": 15810,
+   "val": 510,
+   "test": 2550
+  },
+  {
+   "train": 14280,
+   "val": 4080,
+   "test": 510
+  },
+  {
+   "train": 13770,
+   "val": 1020,
+   "test": 4080
+  }
+ ],
+ "leave_drug": [
+  {
+   "train": 5365,
+   "val": 6179,
+   "test": 7326
+  },
+  {
+   "train": 5365,
+   "val": 5254,
+   "test": 8251
+  },
+  {
+   "train": 5365,
+   "val": 6179,
+   "test": 7326
+  },
+  {
+   "train": 8547,
+   "val": 2072,
+   "test": 8251
+  },
+  {
+   "train": 9176,
+   "val": 6734,
+   "test": 2960
+  }
+ ]
+}
